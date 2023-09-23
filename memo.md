@@ -110,3 +110,72 @@ static int penalty(String word){
 rankedWords(w -> score(w) + bonus(w) - penalty(w), words)
 ```
 
+
+## 4．17実習: Scalaで書き直してみる
+
+```
+// 文字列を昇順に並び替える
+//入力List("scala", "rust", "ada")
+//出力List("ada", "rust", "scala")
+def len(s: String): Int = s.length
+println(List("scala", "rust", "ada").sortBy(len))
+    
+//"s"が入っている数で昇順で並び替え
+def lenOfS(s: String): Int = s.length - s.replaceAll("s", "").length
+println(List("rust", "ada").sortBy(len))
+    
+// Int型の要素からなるリストを降順に並べる
+// List(5, 1, 4, 3, 2)
+def negative(i: Int): Int = -i
+println(List(5, 1, 4, 3, 2).sortBy(negative))
+    
+//'s'の入った降順で並び替え
+def nagativeLenOfS(s: String): Int = s.replaceAll("s", "").length - s.length
+println(List("scala", "rust", "ada", "ssss").sortBy(nagativeLenOfS))
+
+
+def rankedWords(wordScore: String => Int, words: List[String]) = {
+  def negativeScore(word: String): Int =- wordScore(word)
+  words.sortBy(negativeScore)
+}
+```
+
+## 宣言型プログラミングを取り入れる
+- 上記の実習で実装したrankedWordsは「何を行うか」ではなく「どのように行うか」に気をとられている
+- 結果として数行でありながら、わかりづらく、読みづらい。
+
+```
+def rankedWords(wordScore: String => Int, words: List[String]) = {
+  words.sortBy(wordScore).reverse
+}
+```
+
+- 上記のようにすれば「何を行うか」が明確になる
+- たいてい、宣言型のコードは命令型より簡潔でわかりやすい
+
+
+## 小さな関数とそれたの役割
+- ソフトウェアの設計は、管理しやすくすることを目的にしている。
+- そのためには、コードの管理のしやすさ = 簡単に理解できるようにする必要がある
+- **関数ごとに１つの小さなビジネス要件を実装することに焦点を合わせる**
+- 関数をインラインにして渡す（無名関数）のテクニックが効果的だったりもすが、ワンライナーに限る
+
+
+## 新しいパラメータを追加するだけでは不十分
+- 新しい要件がきた際に、3つ目のパラメータを追加するなどはイマイチ
+  - アプローチとしては悪くないが...
+  - 簡単な修正ではすむ
+  - しかし不十分
+  - 私たちが実装するソリューションは他のユーザによって利用されることを踏まえると、引数を増やしても使いやすくはならない
+- 繰り返しそのコードを利用する場合、重複を生み出す可能性がある
+
+## 関数は関数を返すことができる
+（省略）
+P109 ~ P111 参照・まじで感動する
+
+- 関数は関数を返すことができる
+- 結局関数は値
+- つまり、関数から関数を返すことができ、返された関数を任意の名前で保存する。
+- 引数として使ったり、作成したり、他の関数から返すこともできる
+
+
