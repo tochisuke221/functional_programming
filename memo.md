@@ -55,5 +55,58 @@ object Main extends App{
 
 
 
-  
+# 第4章 値としての関数
+## 関数のシグネチャは事実をありのままに伝えるべき
+- シグネチャが関数の本体について、明らかにしない場合はその関数は嘘をついている。
+  - 理想的には、パラメータリストがその説明をすべき
+  - 純粋関数の特徴「関数はその引数にのみ基づいて、戻り値を計算する」を守るべき
+## 関数を値として引数に渡す
+- 関数をイミュータブルな値として引数に渡す
+- ビジネス要件が大きく変わった時に、一部を変更するだけに止めることができる
+  - 管理のしやすさ
+  - テストのしやすさ
+- コードの重複が減る(DRYの原則)
+- 関数のシグネチャが明らかに、関数自体がドキュメントとなる
+
+## 4.10のコーヒーブレイク
+
+```coffee.java
+static List<String> rankedWords(
+  Function<String, Integer> wordScore, List<String> words {
+    Compare<String> wordComparator = (w1, w2) -> Integer.compare(wordScore.apply(w2), wordScore.apply(w1));
+
+    return word.stream().sorted(wordComparator).collect(Collectors.toList())
+  }
+)
+```
+
+
+以下の関数を引数で渡す
+
+```
+static int scoreWithBonusAndPenalty(String word){
+  int base = score(word)
+  int bonus = word.contains("c") ? 5 : 0
+  int penalty = word.contains("s") ? 7 : 0
+
+  return base + bonus + penalty
+}
+
+rankedWords(w -> scoreWithBonusAndPenalty(w), words)
+```
+
+↑
+まだ改良の余地あり
+
+```
+static int bonus(String word){
+  return word.contains("c") ? 5 : 0
+}
+
+static int penalty(String word){
+  return word.contains("s") ? 7 : 0
+}
+
+rankedWords(w -> score(w) + bonus(w) - penalty(w), words)
+```
 
