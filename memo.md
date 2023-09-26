@@ -241,3 +241,27 @@ val authors = recommendations.flatMap(_.authors)
 ```
 List(1,2,3).flatMap(a => List(a * 2).flatMap(b => List(b, b + 19)))
 ```
+
+## 5.12 実習 入れ子のflatMap
+
+```
+List(1).flatMap(x=>
+  List(-2, 7).map(
+    y => Point(x, y)
+  )
+)
+```
+
+## 入れ子のflatMapを改善
+- 入れ子にすると読みにくくなる
+- for内包表記を使う
+
+```
+for {
+  book <- books
+  author <- book.authors
+  movie <- bookAdaptations(author)
+} yield "${movie.title} is good"
+```
+
+
